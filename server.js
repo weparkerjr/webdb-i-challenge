@@ -9,9 +9,15 @@ server.use(express.json());
 
 // POST ACCOUNT
 server.post("/api/accounts", (req, res) => {
+
+    // get information
   const account = req.body;
+ 
+    // db actions
   db('accounts')
   .insert(account, 'id')
+
+  // response back to client
   .then(posted => {
     const response = posted[0];
     res.status(200).json(response);
@@ -23,8 +29,12 @@ server.post("/api/accounts", (req, res) => {
 
 // GET ACCOUNTS
 server.get("/api/accounts", (req, res) => {
+
+    // db actions
   db('accounts')
   .select()
+
+// response back to client
   .then(accounts => {
     res.status(200).json(accounts);
   })
@@ -35,11 +45,17 @@ server.get("/api/accounts", (req, res) => {
 
 // UPDATE ACCOUNT BY ID
 server.put("/api/accounts/:id", (req, res) => {
-  const newAccount = req.body;
+
+    // get information
+  const updateAccount = req.body;
   const id = req.params.id;
+
+  // db actions
   db('accounts')
   .where({id})
-  .update(newAccount)
+  .update(updateAccount)
+
+  // response back to client
   .then(count => {
     if(count > 0){
        res.status(200).json({ message: `${count} account(s) updated`})
@@ -52,10 +68,16 @@ server.put("/api/accounts/:id", (req, res) => {
 
 // DELETE ACCOUNT BY ID
 server.delete('/api/accounts/:id', (req, res) => {
+
+    // get information
   const id = req.params.id;
+
+    // db actions
 db('accounts')
 .where({id})
 .del()
+
+// response back to client
 .then(count => {
   if(count > 0){
     res.status(200).json({ message: `${count} account(s) deleted`})
